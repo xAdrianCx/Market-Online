@@ -7,17 +7,56 @@
     </div>
 
 {% endfor %}
+
 <div class="col-sm-9 col-sm-9-offset-3 col-md-10 col-md-offset-2 main">
-    <h2 class="page-header">DASHBOARD</h2>
+    <h2 class="page-header"><u>Dashboard</u></h2>
     <br/><br/>
-    <h3 class="page-header">Welcome, {{ name }}!</h3>
+    <h3 class="page-header">You are logged in as {{ current_user.username }}</h3>
+    <br/>
 
-
-
-
+<div class="card">
+  <div class="card-header">
+    {{ current_user.username }}'s Dashboard
 
 </div>
+  <div class="card-body">
+    <h5 class="card-title">Welcome to your Dashboard, {{ current_user.username }}!</h5>
+    <p class="card-text"><strong>User ID: </strong>{{ current_user.id}}<br/>
+                        <strong>Full Name: </strong>{{ current_user.full_name}}<br/>
+                        <strong>Age: </strong>{{ current_user.age}}<br/>
+                        <strong>Country: </strong>{{ current_user.location}}<br/>
+                        <strong>Username: </strong>{{ current_user.username}}<br/>
+                        <strong>E-mail: </strong>{{ current_user.email}}<br/>
+                        <strong>Joined Date: </strong>{{ current_user.date_added}}<br/></p>
+    <a href="{{ url_for('logout') }}" class="btn btn-warning btn-sm">Logout</a>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary btn-sm">Update Profile</a>
+    <a href="#" class="btn btn-danger btn-sm">Delete Profile</a>
+  </div>
+</div>
+</div>
+<br/><br/>
+<div class="card">
+  <div class="card-header">
+   Update {{ current_user.username }}'s Profile
 
+</div>
+    <div class="card-body">
 
-
+        <form action="/dashboard" method="POST">
+            {{ form.hidden_tag() }}
+            {{ form.full_name.label(class="form-label") }}
+            {{ form.full_name(class="form-control", value=to_update.full_name) }}
+            {{ form.age.label(class="form-label") }}
+            {{ form.age(class="form-control", value=to_update.age) }}
+            {{ form.location.label(class="form-label") }}
+            {{ form.location(class="form-control", value=to_update.location) }}
+            {{ form.email.label(class="form-label") }}
+            {{ form.username.label(class="form-label") }}
+            {{ form.username(class="form-control", value=to_update.username) }}
+            {{ form.email(class="form-control", value=to_update.email) }}
+            <br/><br/>
+            {{ form.submit( class="btn btn-sm btn-secondary") }}
+        </form>
+    </div>
+</div>
 {% endblock %}

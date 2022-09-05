@@ -3,7 +3,33 @@
 {% block content %}
 
     <h2>Admin Area</h2>
-    <p>Do some admins stuff here...</p>
-
-
+    <br/>
+<div class="shadow p-3 mb-5 bg-body rounded">
+    <table class="table caption-top table-hover table-bordered table-striped">
+        <caption>All Users</caption>
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Full Name</th>
+                <th scope="col">Age</th>
+                <th scope="col">Country</th>
+                <th scope="col">Username</th>
+                <th scope="col">Email</th>
+                <th scope="col">Date Added</th>
+            </tr>
+        </thead>
+    {% for user in all_users %}
+        <tbody>
+            <tr>
+                <td>{{ user.id }}.</td>
+                <td>{{ user.full_name}}</td>
+                <td>{{ user.age}}</td>
+                <td>{{ user.location}}</td>
+                <td>{{ user.username}}</td>
+                <td>{{ user.email}}</td>
+                <td>{{ user.date_added}}</td>
+        <tbody>
+        {% endfor %}
+      </table>
+</div>
 {% endblock %}

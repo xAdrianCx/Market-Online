@@ -12,17 +12,28 @@
       <form class="form-signin" method="POST" action="signup">
         <h2 class="form-signin-heading">Registration</h2>
           <br/>
+        <div class="shadow p-3 mb-5 bg-body rounded">
           {{ form.hidden_tag() }}
+          {{ form.full_name.label(
+          class="form-label") }}
+          {{ form.full_name(
+          class="form-control") }}
+          {{ form.age.label(
+          class="form-label") }}
+          {{ form.age(
+          class="form-control") }}
+          {{ form.location.label(
+          class="form-label") }}
+          {{ form.location(
+          class="form-control") }}
           {{ form.username.label(
           class="form-label") }}
           {{ form.username(
           class="form-control") }}
-          <br/>
           {{ form.email.label(
           class="form-label") }}
           {{ form.email(
           class="form-control") }}
-          <br/>
           {{ form.password.label(
           class="form-label") }}
           {{ form.password(
@@ -31,7 +42,6 @@
           {{ form.signup(
           class="btn btn-secondary") }}
       </form>
-
     </div>
 
 {% endblock %}
