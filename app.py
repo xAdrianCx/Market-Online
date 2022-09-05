@@ -63,7 +63,7 @@ class UserUpdate(FlaskForm):
     full_name = StringField("Full Name", validators=[InputRequired()])
     age = StringField("Your age", validators=[InputRequired()])
     location = StringField("Country", validators=[InputRequired()])
-    username = StringField("Username(Nickname) - You will need this to log in",
+    username = StringField("Username(Nickname)",
                            validators=[InputRequired(), Length(min=4, max=15)])
     email = StringField("Email", validators=[InputRequired(), Email(message="Invalid E-mail!")])
     submit = SubmitField("Update Profile")
