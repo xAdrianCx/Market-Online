@@ -22,7 +22,7 @@
         <tbody>
             <tr>
                 <td>{{ user.id }}.</td>
-                <td>{{ user.full_name}}</td>
+                <td><a href="{{ url_for('admin_user_edit', id=user.id) }}">{{ user.full_name}}</a></td>
                 <td>{{ user.age}}</td>
                 <td>{{ user.location}}</td>
                 <td>{{ user.username}}</td>

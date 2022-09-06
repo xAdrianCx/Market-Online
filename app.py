@@ -59,14 +59,15 @@ class RegistrationForm(FlaskForm):
 
 
 # Create a UserUpdate form.
-class UserUpdate(FlaskForm):
+class UserEdit(FlaskForm):
     full_name = StringField("Full Name", validators=[InputRequired()])
     age = StringField("Your age", validators=[InputRequired()])
     location = StringField("Country", validators=[InputRequired()])
     username = StringField("Username(Nickname)",
                            validators=[InputRequired(), Length(min=4, max=15)])
     email = StringField("Email", validators=[InputRequired(), Email(message="Invalid E-mail!")])
-    submit = SubmitField("Update Profile")
+    edit = SubmitField("Update Profile")
+    edit = SubmitField("Delete Profile")
 
 
 # Create index route.
@@ -127,7 +128,7 @@ def signup():
 
             db.session.add(new_user)
             db.session.commit()
-            flash(f"User '{form.username.data}' has been successfully created. Got to login page.")
+            flash(f"User '{form.username.data}' has been successfully created. Go to the login page.")
     return render_template("signup.html",
                            form=form)
 
@@ -140,32 +141,88 @@ def load_user(user_id):
 @app.route("/dashboard", methods=["GET", "POST"])
 @login_required
 def dashboard():
-    form = UserUpdate()
+    form = UserEdit()
     id = current_user.id
     to_update = Users.query.get_or_404(id)
     if request.method == "POST":
-        to_update.full_name = request.form["full_name"]
-        to_update.age = request.form["age"]
-        to_update.location = request.form["location"]
-        to_update.username = request.form["username"]
-        to_update.email = request.form["email"]
-        try:
-            db.session.commit()
-            flash("User details updated successfully!")
-            return render_template("dashboard.html",
-                                   current_user=current_user,
-                                   to_update=to_update,
-                                   form=form)
-        except:
-            flash("Oops! Seems there was an error! Try again!")
-            return render_template("dashboard.html",
-                                   current_user=current_user,
-                                   to_update=to_update,
-                                   form=form)
+        if request.form["edit"] == "Update Profile":
+            to_update.full_name = request.form["full_name"]
+            to_update.age = request.form["age"]
+            to_update.location = request.form["location"]
+            to_update.username = request.form["username"]
+            to_update.email = request.form["email"]
+            try:
+                db.session.commit()
+                flash("User profile updated successfully!")
+                return render_template("dashboard.html",
+                                       current_user=current_user,
+                                       to_update=to_update,
+                                       form=form)
+            except:
+                flash("Oops! Something went wrong! Try again!")
+                return render_template("dashboard.html",
+                                       current_user=current_user,
+                                       to_update=to_update,
+                                       form=form)
+        if request.form["edit"] == "Delete Profile":
+            try:
+                db.session.delete(to_update)
+                db.session.commit()
+                return redirect(url_for("index"))
+            except:
+                flash("Oops! Something went wrong. Try again.")
     return render_template("dashboard.html",
                            current_user=current_user,
                            to_update=to_update,
                            form=form)
+
+
+@app.route("/admin_user_edit/<int:id>", methods = ["GET", "POST"])
+@login_required
+def admin_user_edit(id):
+    form = UserEdit()
+    all_users = Users.query.order_by(Users.date_added)
+    to_update = Users.query.get_or_404(id)
+    if request.method == "POST":
+        if request.form["edit"] == "Update Profile":
+            to_update.full_name = request.form["full_name"]
+            to_update.age = request.form["age"]
+            to_update.location = request.form["location"]
+            to_update.username = request.form["username"]
+            to_update.email = request.form["email"]
+            try:
+                db.session.commit()
+                flash("User profile updated successfully!")
+                return render_template("admin_user_edit.html",
+                                       current_user=current_user,
+                                       to_update=to_update,
+                                       all_users=all_users,
+                                       id=id,
+                                       form=form)
+            except:
+                flash("Oops! Something went wrong! Try again!")
+                return render_template("admin_user_edit.html",
+                                       current_user=current_user,
+                                       to_update=to_update,
+                                       all_users=all_users,
+                                       id=id,
+                                       form=form)
+        if request.form["edit"] == "Delete Profile":
+            try:
+                db.session.delete(to_update)
+                db.session.commit()
+                return redirect(url_for("admin"))
+            except:
+                flash("Oops! Something went wrong. Try again.")
+    return render_template("admin_user_edit.html",
+                           current_user=current_user,
+                           to_update=to_update,
+                           all_users=all_users,
+                           id=id,
+                           form=form)
+
+
+
 
 @app.route("/logout")
 @login_required

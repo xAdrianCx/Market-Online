@@ -16,7 +16,7 @@
 
 <div class="card">
   <div class="card-header">
-    {{ current_user.username }}'s Dashboard
+      <strong>{{ current_user.username }}'s Dashboard</strong>
 
 </div>
   <div class="card-body">
@@ -28,16 +28,16 @@
                         <strong>Username: </strong>{{ current_user.username}}<br/>
                         <strong>E-mail: </strong>{{ current_user.email}}<br/>
                         <strong>Joined Date: </strong>{{ current_user.date_added}}<br/></p>
-    <a href="{{ url_for('logout') }}" class="btn btn-warning btn-sm">Logout</a>
-    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary btn-sm">Update Profile</a>
-    <a href="#" class="btn btn-danger btn-sm">Delete Profile</a>
+      <button type="button" class="btn btn-original btn-secondary btn-sm" data-bs-toggle="collapse" data-bs-target="#Edit">Edit Profile</button>
+    <a href="{{ url_for('logout') }}" class="btn btn-right btn-warning btn-sm">Logout</a>
   </div>
 </div>
 </div>
 <br/><br/>
+<div id="Edit" class="collapse">
 <div class="card">
   <div class="card-header">
-   Update {{ current_user.username }}'s Profile
+      <strong>Update {{ current_user.username }}'s Profile</strong>
 
 </div>
     <div class="card-body">
@@ -50,14 +50,16 @@
             {{ form.age(class="form-control", value=to_update.age) }}
             {{ form.location.label(class="form-label") }}
             {{ form.location(class="form-control", value=to_update.location) }}
-            {{ form.email.label(class="form-label") }}
             {{ form.username.label(class="form-label") }}
             {{ form.username(class="form-control", value=to_update.username) }}
+            {{ form.email.label(class="form-label") }}
             {{ form.email(class="form-control", value=to_update.email) }}
             <br/><br/>
-            {{ form.submit( class="btn btn-sm btn-secondary") }}
+            {{ form.edit(class="btn btn-sm btn-secondary", value="Update Profile") }}
+            {{ form.edit(class="btn btn-right btn-sm btn-danger", value="Delete Profile") }}
         </form>
     </div>
+</div>
 </div>
 <br/><br/>
 {% endblock %}

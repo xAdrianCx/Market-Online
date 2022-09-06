@@ -5,3 +5,7 @@ h1 {
 body {
     background: silver;
 }
+
+.btn-right {
+    float: right;
+}
