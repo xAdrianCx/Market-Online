@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>{{ message }}</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+{% endfor %}
+
+
+<div class="col-sm-9 col-sm-9-offset-3 col-md-10 col-md-offset-2 main">
+    <h2 class="page-header"><u>Products Edit Area</u></h2>
+    <br/><br/>
+    <h3 class="page-header">Admin logged in: {{ current_user.username }}.</h3>
+    <br/>
+</div>
+
+<div class="card">
+<div class="card-header">
+      <strong>Update Product: {{ to_edit.product_name }}</strong>
+    <br/><br/><br/>
+    <h5><center>Product ID: {{ to_edit.id }}</center></h5>
+    <div class="card-body">
+        <form action="/edit_product/{{ to_edit.id }}" method="POST">
+            {{ form.hidden_tag() }}
+            {{ form.product_name.label(class="form-label") }}
+            {{ form.product_name(class="form-control", value=to_edit.product_name) }}
+            {{ form.description.label(class="form-label") }}
+            {{ form.description(class="form-control", value=to_edit.description) }}
+            {{ form.category.label(class="form-label") }}
+            {{ form.category(class="form-control", value=to_edit.category) }}
+            {{ form.origin.label(class="form-label") }}
+            {{ form.origin(class="form-control", value=to_edit.origin) }}
+            {{ form.price.label(class="form-label") }}
+            {{ form.price(class="form-control", value=to_edit.price) }}
+            {{ form.image.label(class="form-label") }}
+            {{ form.image(class="form-control", value=to_edit.image) }}
+            <br/><br/>
+            {{ form.edit(class="btn btn-sm btn-secondary", value="Update Product") }}
+            {{ form.edit(class="btn btn-right btn-sm btn-danger", value="Delete Product") }}
+        </form>
+    </div>
+</div>
+</div>
+<br/><br/>
+
+{% endblock %}

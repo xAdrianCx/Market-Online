@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2><u>Products Area</u></h2>
+    <br/><br/>
+<div class="btn btn-warning btn-right"><a href="{{ url_for('add_product') }}">Add Product</a></div>
+    <h5>Click on a Product Name to edit or delete,
+        or click the "Add Product" button to add a new product.</h5><br/>
+
+<div class="shadow p-3 mb-5 bg-body rounded">
+    <table class="table caption-top table-hover table-bordered table-striped">
+        <caption><strong>All Products</strong></caption>
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Product Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Category</th>
+                <th scope="col">Origin</th>
+                <th scope="col">Price</th>
+                <th scope="col">Image</th>
+                <th scope="col">Date Added</th>
+            </tr>
+        </thead>
+    {% for product in all_products %}
+        <tbody>
+            <tr>
+                <td>{{ product.id }}.</td>
+                <td><a href="{{ url_for('edit_product', id=product.id) }}">{{ product.product_name}}</a></td>
+                <td>{{ product.description}}</td>
+                <td>{{ product.category}}</td>
+                <td>{{ product.origin}}</td>
+                <td>{{ product.price}}</td>
+                <td>{{ product.image}}</td>
+                <td>{{ product.date_added}}</td>
+        <tbody>
+        {% endfor %}
+      </table>
+</div>
+{% endblock %}

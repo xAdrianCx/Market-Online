@@ -261,6 +261,20 @@ def admin_user_edit(id):
                            form=form)
 
 
+@app.route("/products")
+@login_required
+def admin_products():
+    all_products = Products.query.order_by(Products.date_added)
+    id = current_user.id
+    if id == 1:
+        return render_template("admin_products.html",
+                               all_products=all_products)
+    else:
+        flash("You are not authorized to see this page.")
+        return redirect("index")
+
+
+
 @app.route("/add_product", methods=["GET", "POST"])
 @login_required
 def add_product():
@@ -291,7 +305,7 @@ def edit_product(id):
     all_products = Products.query.order_by(Products.date_added)
     to_edit = Products.query.get_or_404(id)
     if request.method == "POST":
-        if request.form["edit"] == "Update Profile":
+        if request.form["edit"] == "Update Product":
             to_edit.product_name = request.form["product_name"]
             to_edit.description = request.form["description"]
             to_edit.category = request.form["category"]
@@ -301,14 +315,14 @@ def edit_product(id):
             try:
                 db.session.commit()
                 flash("Product updated successfully!")
-                return render_template("edit_product.html",
+                return render_template("admin_products.html",
                                        to_edit=to_edit,
                                        all_products=all_products,
                                        id=id,
                                        form=form)
             except:
                 flash("Oops! Something went wrong. Try again!")
-                return render_template("edit_product.html",
+                return render_template("admin_products.html",
                                        to_edit=to_edit,
                                        all_products=all_products,
                                        id=id,
@@ -318,7 +332,7 @@ def edit_product(id):
                 db.session.delete(to_edit)
                 db.session.commit()
                 flash("Product deleted successfully!")
-                return redirect(url_for("add_product"))
+                return redirect(url_for("admin_products"))
             except:
                 flash("Oops! Something went wrong. Try again!")
     return render_template("edit_product.html",
