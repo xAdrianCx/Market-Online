@@ -26,7 +26,7 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 
-# Create a Users class.
+# Create Users table.
 class Users(UserMixin, db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     full_name = db.Column(db.String(200))
@@ -68,6 +68,45 @@ class UserEdit(FlaskForm):
     email = StringField("Email", validators=[InputRequired(), Email(message="Invalid E-mail!")])
     edit = SubmitField("Update Profile")
     edit = SubmitField("Delete Profile")
+
+
+
+# Create Products table.
+class Products(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    product_name = db.Column(db.String(200))
+    description = db.Column(db.String(200))
+    category = db.Column(db.String(200))
+    origin = db.Column(db.String(200))
+    price = db.Column(db.String(200))
+    image = db.Column(db.String(200))
+    date_added = db.Column(db.String())
+
+
+
+# Create AddProduct form.
+class AddProduct(FlaskForm):
+    product_name = StringField("Product Name", validators=[InputRequired()])
+    description = StringField("Description", validators=[InputRequired()])
+    category = StringField("Category", validators=[InputRequired()])
+    origin = StringField("Made In", validators=[InputRequired()])
+    price = StringField("Price", validators=[InputRequired()])
+    image = StringField("Image source", validators=[InputRequired()])
+    date_added = str(datetime.now()).split(".")[0]
+    submit = SubmitField("Add Product")
+
+
+
+# Create EditProducts form.
+class EditProduct(FlaskForm):
+    product_name = StringField("Product Name", validators=[InputRequired()])
+    description = StringField("Description", validators=[InputRequired()])
+    category = StringField("Category", validators=[InputRequired()])
+    origin = StringField("Made In", validators=[InputRequired()])
+    price = StringField("Price", validators=[InputRequired()])
+    image = StringField("Image source", validators=[InputRequired()])
+    edit = SubmitField("Update Product")
+    edit = SubmitField("Delete Product")
 
 
 # Create index route.
@@ -222,6 +261,71 @@ def admin_user_edit(id):
                            form=form)
 
 
+@app.route("/add_product", methods=["GET", "POST"])
+@login_required
+def add_product():
+    form = AddProduct()
+    if form.validate_on_submit():
+        new_product = Products(product_name=form.product_name.data,
+                               description=form.description.data,
+                               category=form.category.data,
+                               origin=form.origin.data,
+                               price=form.price.data,
+                               image=form.image.data,
+                               date_added=form.date_added)
+        db.session.add(new_product)
+        db.session.commit()
+        flash(f"Product '{form.product_name.data}' has been successfully added.")
+
+    else:
+        return render_template("add_product.html",
+                    form=form)
+
+    return render_template("add_product.html",
+                           form=form)
+
+@app.route("/edit_product/<int:id>", methods=["GET", "POST"])
+@login_required
+def edit_product(id):
+    form = EditProduct()
+    all_products = Products.query.order_by(Products.date_added)
+    to_edit = Products.query.get_or_404(id)
+    if request.method == "POST":
+        if request.form["edit"] == "Update Profile":
+            to_edit.product_name = request.form["product_name"]
+            to_edit.description = request.form["description"]
+            to_edit.category = request.form["category"]
+            to_edit.origin = request.form["origin"]
+            to_edit.price = request.form["price"]
+            to_edit.image = request.form["image"]
+            try:
+                db.session.commit()
+                flash("Product updated successfully!")
+                return render_template("edit_product.html",
+                                       to_edit=to_edit,
+                                       all_products=all_products,
+                                       id=id,
+                                       form=form)
+            except:
+                flash("Oops! Something went wrong. Try again!")
+                return render_template("edit_product.html",
+                                       to_edit=to_edit,
+                                       all_products=all_products,
+                                       id=id,
+                                       form=form)
+        if request.form["edit"] == "Delete Product":
+            try:
+                db.session.delete(to_edit)
+                db.session.commit()
+                flash("Product deleted successfully!")
+                return redirect(url_for("add_product"))
+            except:
+                flash("Oops! Something went wrong. Try again!")
+    return render_template("edit_product.html",
+                           to_edit=to_edit,
+                           all_products=all_products,
+                           id=id,
+                           form=form)
 
 
 @app.route("/logout")

@@ -7,42 +7,46 @@
     </div>
 
 {% endfor %}
-    <div class="container">
 
-      <form class="form-signin" method="POST" action="signup">
-        <h2 class="form-signin-heading">Registration</h2>
+<h2><u>Add Product Area</u></h2>
+<br/>
+<div class="container">
+      <form class="form-signin" method="POST" action="add_product">
+        <h3 class="form-signin-heading">Admin logged in: {{ current_user.username }}</h3>
           <br/>
         <div class="shadow p-3 mb-5 bg-body rounded">
           {{ form.hidden_tag() }}
-          {{ form.full_name.label(
+          {{ form.product_name.label(
           class="form-label") }}
-          {{ form.full_name(
+          {{ form.product_name(
           class="form-control") }}
-          {{ form.age.label(
+          {{ form.description.label(
           class="form-label") }}
-          {{ form.age(
+          {{ form.description(
           class="form-control") }}
-          {{ form.location.label(
+          {{ form.category.label(
           class="form-label") }}
-          {{ form.location(
+          {{ form.category(
           class="form-control") }}
-          {{ form.username.label(
+          {{ form.origin.label(
           class="form-label") }}
-          {{ form.username(
+          {{ form.origin(
           class="form-control") }}
-          {{ form.email.label(
+          {{ form.price.label(
           class="form-label") }}
-          {{ form.email(
+          {{ form.price(
           class="form-control") }}
-          {{ form.password.label(
+          {{ form.image.label(
           class="form-label") }}
-          {{ form.password(
+          {{ form.image(
           class="form-control") }}
           <br/>
-          {{ form.signup(
+          {{ form.submit(
           class="btn btn-secondary") }}
         </div>
       </form>
     </div>
+
+
 
 {% endblock %}
