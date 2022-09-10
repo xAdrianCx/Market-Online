@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>{{ message }}</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+{% endfor %}
+
+    <h2><u>Product Details</u></h2>
+<br/><br/>
+<div class="card">
+  <div class="card-header">
+      <strong>{{ to_display.product_name }}'s Details</strong>
+  </div>
+  <div class="card-body">
+      <h5 class="card-title"><u>Know your product!</u></h5> <br/>
+      <div class="img-right">
+      <img src="{{ url_for('static', filename='images/Laptop-Asus-ZenBook-14-UM425QA-AMD-Ryzen-5-5600H-512GB-SSD-16GB-AMD-Radeon-Graphics-FullHD-Win11-Pine-Grey-3.png') }}">
+        </div>
+      <p class="card-text"><strong>Product ID: </strong>{{ to_display.id}}<br/><br/>
+        <strong>Product name: </strong>{{ to_display.product_name}}<br/><br/>
+        <strong>Product Description: </strong>{{ to_display.description}}<br/><br/>
+        <strong>Category: </strong>{{ to_display.category}}<br/><br/>
+        <strong>Made In: </strong>{{ to_display.origin}}<br/><br/>
+        <strong>Price: </strong>{{ to_display.price}}<br/><br/>
+
+
+  </div>
+</div>
+
+
+
+
+{% endblock %}

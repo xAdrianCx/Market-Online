@@ -1,6 +1,6 @@
-from flask import Flask, render_template, flash, redirect, url_for, request
+from flask import Flask, render_template, flash, redirect, url_for, request,
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField,
 from wtforms.validators import InputRequired, Email, Length
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -107,6 +107,15 @@ class EditProduct(FlaskForm):
     image = StringField("Image source", validators=[InputRequired()])
     edit = SubmitField("Update Product")
     edit = SubmitField("Delete Product")
+
+
+# Create a Contact Us form.
+class ContactForm(FlaskForm):
+    name = StringField("Your Name", validators=[InputRequired])
+    email = StringField("Your E-mail", validators=[InputRequired, Email(message="Invalid e-mail address!")])
+    subject = StringField("Subject")
+    message = TextAreaField("Your message")
+    submit = SubmitField("Send message")
 
 
 # Create index route.
@@ -342,12 +351,36 @@ def edit_product(id):
                            form=form)
 
 
+@app.route("/user_products")
+@login_required
+def user_products():
+    all_products = Products.query.filter(Products.id)
+    return render_template("user_products.html",
+                           all_products=all_products)
+
+
+@app.route("/product_details/<int:id>", methods=["GET", "POST"])
+@login_required
+def product_details(id):
+    all_products = Products.query.filter(Products.id)
+    to_display = Products.query.get_or_404(id)
+    return render_template("product_details.html",
+                           all_products=all_products,
+                           to_display=to_display)
+
+
 @app.route("/logout")
 @login_required
 def logout():
     logout_user()
     return redirect(url_for("login"))
 
+
+@app.route("/contact_us")
+def contact_us():
+    form = ContactForm()
+    return render_template("contact.html",
+                           form=form)
 
 
 

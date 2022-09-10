@@ -9,3 +9,15 @@ body {
 .btn-right {
     float: right;
 }
+
+.img-products {
+    display: block;
+    max_width: 100%;
+    height: auto;
+}
+
+.img-right {
+    display: block;
+    max_width: 100%;
+    float: right;
+}

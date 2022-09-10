@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1><center><u>PRODUCTS LIST</u></center></h1>
+<br/><br/>
+<div class="container">
+    <div class="row">
+        {% for product in all_products %}
+        <div class="card" style="width: 20rem">
+          <div class="card-body">
+            <h5 class="card-title">{{ product.product_name }}</h5><br/><br/>
+            <img src="{{ url_for('static', filename='images/Laptop-Asus-ZenBook-14-UM425QA-AMD-Ryzen-5-5600H-512GB-SSD-16GB-AMD-Radeon-Graphics-FullHD-Win11-Pine-Grey-3.png') }}" class="img-thumbnail">
+            <p>{{ product.description }}</p>
+              <a href="{{ url_for('product_details', id=product.id )}}" class="float-left btn btn-sm btn-primary">Details</a>
+              </div>
+            </div>
+
+        {% endfor %}
+    </div>
+</div>
+<br/><br/>
+
+
+{% endblock %}
