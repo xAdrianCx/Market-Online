@@ -1,6 +1,8 @@
-from flask import Flask, render_template, flash, redirect, url_for, request,
+import os
+from flask import Flask, render_template, flash, redirect, url_for, request
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField,
+from flask_mail import Message, Mail
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
 from wtforms.validators import InputRequired, Email, Length
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -8,6 +10,8 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from datetime import datetime
 
 
+# Create a Mail instance.
+mail = Mail()
 # Create a Flask instance.
 app = Flask(__name__)
 # Add a secret key.
@@ -16,6 +20,18 @@ app.config["SECRET_KEY"] = "MY super secret key"
 app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///database.db'
 # Get rid of SQLALCHEMY_TRACK_MODIFICATIONS warning.
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# Set up the mail server.
+app.config["MAIL_SERVER"] = "smtp.gmail.com"
+# Set up a mail port.
+app.config["MAIL_PORT"] = 465
+# Encript data using SSL.
+app.config["MAIL_USE_SSL"] = True
+# Set up where to send the e-mail.
+app.config["MAIL_USERNAME"] = os.environ.get("GMAIL")
+# E-mail password.
+app.config["MAIL_PASSWORD"] = os.environ.get("GMAIL_PW")
+# Initialize mail.
+mail.init_app(app)
 # Create db Instance.
 db = SQLAlchemy(app)
 
@@ -111,8 +127,8 @@ class EditProduct(FlaskForm):
 
 # Create a Contact Us form.
 class ContactForm(FlaskForm):
-    name = StringField("Your Name", validators=[InputRequired])
-    email = StringField("Your E-mail", validators=[InputRequired, Email(message="Invalid e-mail address!")])
+    name = StringField("Your Name", validators=[InputRequired()])
+    email = StringField("Your E-mail", validators=[InputRequired(), Email(message="Invalid e-mail address!")])
     subject = StringField("Subject")
     message = TextAreaField("Your message")
     submit = SubmitField("Send message")
@@ -376,11 +392,22 @@ def logout():
     return redirect(url_for("login"))
 
 
-@app.route("/contact_us")
+@app.route("/contact_us", methods=["GET", "POST"])
 def contact_us():
     form = ContactForm()
-    return render_template("contact.html",
-                           form=form)
+    if request.method == "POST":
+        msg = Message(form.subject.data, sender="Market Online", recipients=["adicotuna26@gmail.com"])
+        msg.body = """
+        From: %s <%s>
+        %s
+        """ % (form.name.data, form.email.data, form.message.data)
+        mail.send(msg)
+        flash("Message sent successfully!")
+        return render_template("contact.html",
+                               form=form)
+    elif request.method == "GET":
+        return render_template("contact.html",
+                               form=form)
 
 
 
