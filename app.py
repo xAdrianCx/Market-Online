@@ -372,7 +372,8 @@ def edit_product(id):
 def user_products():
     all_products = Products.query.filter(Products.id)
     return render_template("user_products.html",
-                           all_products=all_products)
+                               all_products=all_products)
+
 
 
 @app.route("/product_details/<int:id>", methods=["GET", "POST"])

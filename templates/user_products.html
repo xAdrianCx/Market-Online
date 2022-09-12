@@ -2,23 +2,143 @@
 {% block content %}
 
 <h1><center><u>PRODUCTS LIST</u></center></h1>
-<br/><br/>
-<div class="container">
-    <div class="row">
-        {% for product in all_products %}
-        <div class="card" style="width: 20rem">
-          <div class="card-body">
-            <h5 class="card-title">{{ product.product_name }}</h5><br/><br/>
-            <img src="{{ url_for('static', filename='images/Laptop-Asus-ZenBook-14-UM425QA-AMD-Ryzen-5-5600H-512GB-SSD-16GB-AMD-Radeon-Graphics-FullHD-Win11-Pine-Grey-3.png') }}" class="img-thumbnail">
-            <p>{{ product.description }}</p>
-              <a href="{{ url_for('product_details', id=product.id )}}" class="float-left btn btn-sm btn-primary">Details</a>
-              </div>
-            </div>
-
+<br/><br/><br/>
+<center><button type="button" class="btn btn-original btn-secondary btn-sm" data-bs-toggle="collapse" data-bs-target="#PCs">Desktop PCs</button>
+<button type="button" class="btn btn-original btn-secondary btn-sm" data-bs-toggle="collapse" data-bs-target="#Laptops">Laptops</button>
+<button type="button" class="btn btn-original btn-secondary btn-sm" data-bs-toggle="collapse" data-bs-target="#Tablets">Tablets</button>
+<button type="button" class="btn btn-original btn-secondary btn-sm" data-bs-toggle="collapse" data-bs-target="#Smartphones">Smartphones</button>
+<button type="button" class="btn btn-original btn-secondary btn-sm" data-bs-toggle="collapse" data-bs-target="#Smartwatches">Smartwatches</button></center>
+<br/>
+<div id="PCs" class="collapse">
+    <div class="card">
+      <div class="card-header">
+          <strong>All Desktop PCs</strong>
+    </div>
+    <div class="card-body">
+        <div class="container">
+            <div class="row">
+                {% for product in all_products %}
+                    {% if product.category == "Desktop PCs" %}
+                        <div class="card" style="width: 15rem">
+                          <div class="card-body">
+                              <a href="{{ url_for('product_details', id=product.id )}}"><h5 class="card-title">{{ product.product_name }}</h5><br/><br/></a>
+                              <a href="{{ url_for('product_details', id=product.id )}}"><img src="{{ url_for('static', filename=product.image) }}" class="img-thumbnail"></a>
+                            <br/><br/>
+                              <a href="{{ url_for('product_details', id=product.id )}}" class="float-left btn btn-sm btn-primary">Details</a>
+                              </div>
+                            </div>
+                    {% endif %}
         {% endfor %}
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-<br/><br/>
+<br/>
+<div id="Laptops" class="collapse">
+    <div class="card">
+      <div class="card-header">
+          <strong>All Laptops</strong>
+    </div>
+    <div class="card-body">
+        <div class="container">
+            <div class="row">
+                {% for product in all_products %}
+                    {% if product.category == "Laptops" %}
+                        <div class="card" style="width: 15rem">
+                          <div class="card-body">
+                              <a href="{{ url_for('product_details', id=product.id )}}"><h5 class="card-title">{{ product.product_name }}</h5><br/><br/></a>
+                              <a href="{{ url_for('product_details', id=product.id )}}"><img src="{{ url_for('static', filename='images/Laptop-Asus-ZenBook-14-UM425QA-AMD-Ryzen-5-5600H-512GB-SSD-16GB-AMD-Radeon-Graphics-FullHD-Win11-Pine-Grey-3.png') }}" class="img-thumbnail"></a>
+                            <br/><br/>
+                              <a href="{{ url_for('product_details', id=product.id )}}" class="float-left btn btn-sm btn-primary">Details</a>
+                              </div>
+                            </div>
+                    {% endif %}
+        {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
+<div id="Tablets" class="collapse">
+    <div class="card">
+      <div class="card-header">
+          <strong>All Tablets</strong>
+    </div>
+    <div class="card-body">
+        <div class="container">
+            <div class="row">
+                {% for product in all_products %}
+                    {% if product.category == "Tablets" %}
+                        <div class="card" style="width: 15rem">
+                          <div class="card-body">
+                              <a href="{{ url_for('product_details', id=product.id )}}"><h5 class="card-title">{{ product.product_name }}</h5><br/><br/></a>
+                              <a href="{{ url_for('product_details', id=product.id )}}"><img src="{{ url_for('static', filename='images/Laptop-Asus-ZenBook-14-UM425QA-AMD-Ryzen-5-5600H-512GB-SSD-16GB-AMD-Radeon-Graphics-FullHD-Win11-Pine-Grey-3.png') }}" class="img-thumbnail"></a>
+                            <br/><br/>
+                              <a href="{{ url_for('product_details', id=product.id )}}" class="float-left btn btn-sm btn-primary">Details</a>
+                              </div>
+                            </div>
+                    {% endif %}
+        {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
+<div id="Smartphones" class="collapse">
+    <div class="card">
+      <div class="card-header">
+          <strong>All Smartphones</strong>
+    </div>
+    <div class="card-body">
+        <div class="container">
+            <div class="row">
+                {% for product in all_products %}
+                    {% if product.category == "Smatrphones" %}
+                        <div class="card" style="width: 15rem">
+                          <div class="card-body">
+                              <a href="{{ url_for('product_details', id=product.id )}}"><h5 class="card-title">{{ product.product_name }}</h5><br/><br/></a>
+                              <a href="{{ url_for('product_details', id=product.id )}}"><img src="{{ url_for('static', filename='images/Laptop-Asus-ZenBook-14-UM425QA-AMD-Ryzen-5-5600H-512GB-SSD-16GB-AMD-Radeon-Graphics-FullHD-Win11-Pine-Grey-3.png') }}" class="img-thumbnail"></a>
+                            <br/><br/>
+                              <a href="{{ url_for('product_details', id=product.id )}}" class="float-left btn btn-sm btn-primary">Details</a>
+                              </div>
+                            </div>
+                    {% endif %}
+        {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
+<div id="Smartwatches" class="collapse">
+    <div class="card">
+      <div class="card-header">
+          <strong>All Smartwatches</strong>
+    </div>
+    <div class="card-body">
+        <div class="container">
+            <div class="row">
+                {% for product in all_products %}
+                    {% if product.category == "Smartwatches" %}
+                        <div class="card" style="width: 15rem">
+                          <div class="card-body">
+                              <a href="{{ url_for('product_details', id=product.id )}}"><h5 class="card-title">{{ product.product_name }}</h5><br/><br/></a>
+                              <a href="{{ url_for('product_details', id=product.id )}}"><img src="{{ url_for('static', filename='images/Laptop-Asus-ZenBook-14-UM425QA-AMD-Ryzen-5-5600H-512GB-SSD-16GB-AMD-Radeon-Graphics-FullHD-Win11-Pine-Grey-3.png') }}" class="img-thumbnail"></a>
+                            <br/><br/>
+                              <a href="{{ url_for('product_details', id=product.id )}}" class="float-left btn btn-sm btn-primary">Details</a>
+                              </div>
+                            </div>
+                    {% endif %}
+        {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
 
 
 {% endblock %}
