@@ -17,7 +17,7 @@
   <div class="card-body">
       <h5 class="card-title"><u>Know your product!</u></h5> <br/>
       <div class="img-right">
-      <img src="{{ url_for('static', filename='images/Laptop-Asus-ZenBook-14-UM425QA-AMD-Ryzen-5-5600H-512GB-SSD-16GB-AMD-Radeon-Graphics-FullHD-Win11-Pine-Grey-3.png') }}">
+      <img src="{{ url_for('static', filename='images/' + to_display.image) }}">
         </div>
       <p class="card-text"><strong>Product ID: </strong>{{ to_display.id}}<br/><br/>
         <strong>Product name: </strong>{{ to_display.product_name}}<br/><br/>

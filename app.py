@@ -340,7 +340,7 @@ def edit_product(id):
             try:
                 db.session.commit()
                 flash("Product updated successfully!")
-                return render_template("admin_products.html",
+                return render_template("edit_product.html",
                                        to_edit=to_edit,
                                        all_products=all_products,
                                        id=id,
