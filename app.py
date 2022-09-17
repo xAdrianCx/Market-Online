@@ -134,7 +134,7 @@ class ContactForm(FlaskForm):
     submit = SubmitField("Send message")
 
 # Creating a global variable to make it easier to maintain admins.
-admins = [1, 3]
+admins = [1]
 
 # Create index route.
 @app.route("/")
