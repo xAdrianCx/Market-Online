@@ -145,7 +145,7 @@ def index():
 def admin():
     all_users = Users.query.order_by(Users.date_added)
     id = current_user.id
-    if id == 1:
+    if id in [1, 3]:
         return render_template("admin.html",
                                all_users=all_users)
     else:
@@ -156,7 +156,6 @@ def admin():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
-
     if form.validate_on_submit():
         user = Users.query.filter_by(username=form.username.data).first()
         if user:
@@ -291,7 +290,7 @@ def admin_user_edit(id):
 def admin_products():
     all_products = Products.query.order_by(Products.date_added)
     id = current_user.id
-    if id == 1:
+    if id in [1, 3]:
         return render_template("admin_products.html",
                                all_products=all_products)
     else:
