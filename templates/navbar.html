@@ -9,7 +9,7 @@
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
         {% if current_user.is_authenticated %}
-        {% if current_user.id == 1 %}
+        {% if current_user.id in [1, 3] %}
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('user_products') }}">Products</a>
           </li>

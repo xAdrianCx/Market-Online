@@ -19,14 +19,13 @@
         <caption><strong>All Products</strong></caption>
         <thead>
             <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Product Name</th>
-                <th scope="col">Description</th>
-                <th scope="col">Category</th>
-                <th scope="col">Origin</th>
-                <th scope="col">Price</th>
-                <th scope="col">Image</th>
-                <th scope="col">Date Added</th>
+                <th scope="col"><center>ID</center></th>
+                <th scope="col"><center>Product Name</center></th>
+                <th scope="col"><center>Description</center></th>
+                <th scope="col"><center>Category</center></th>
+                <th scope="col"><center>Origin</center></th>
+                <th scope="col"><center>Price</center></th>
+                <th scope="col"><center>Date Added</center></th>
             </tr>
         </thead>
     {% for product in all_products %}
@@ -38,7 +37,6 @@
                 <td>{{ product.category}}</td>
                 <td>{{ product.origin}}</td>
                 <td>{{ product.price}}</td>
-                <td>{{ product.image}}</td>
                 <td>{{ product.date_added}}</td>
         <tbody>
         {% endfor %}

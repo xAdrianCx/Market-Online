@@ -133,6 +133,8 @@ class ContactForm(FlaskForm):
     message = TextAreaField("Your message")
     submit = SubmitField("Send message")
 
+# Creating a global variable to make it easier to maintain admins.
+admins = [1, 3]
 
 # Create index route.
 @app.route("/")
@@ -144,8 +146,7 @@ def index():
 @login_required
 def admin():
     all_users = Users.query.order_by(Users.date_added)
-    id = current_user.id
-    if id in [1, 3]:
+    if current_user.id in admins:
         return render_template("admin.html",
                                all_users=all_users)
     else:
@@ -246,51 +247,54 @@ def admin_user_edit(id):
     form = UserEdit()
     all_users = Users.query.order_by(Users.date_added)
     to_update = Users.query.get_or_404(id)
-    if request.method == "POST":
-        if request.form["edit"] == "Update Profile":
-            to_update.full_name = request.form["full_name"]
-            to_update.age = request.form["age"]
-            to_update.location = request.form["location"]
-            to_update.username = request.form["username"]
-            to_update.email = request.form["email"]
-            try:
-                db.session.commit()
-                flash("User profile updated successfully!")
-                return render_template("admin_user_edit.html",
-                                       current_user=current_user,
-                                       to_update=to_update,
-                                       all_users=all_users,
-                                       id=id,
-                                       form=form)
-            except:
-                flash("Oops! Something went wrong! Try again!")
-                return render_template("admin_user_edit.html",
-                                       current_user=current_user,
-                                       to_update=to_update,
-                                       all_users=all_users,
-                                       id=id,
-                                       form=form)
-        if request.form["edit"] == "Delete Profile":
-            try:
-                db.session.delete(to_update)
-                db.session.commit()
-                return redirect(url_for("admin"))
-            except:
-                flash("Oops! Something went wrong. Try again.")
-    return render_template("admin_user_edit.html",
-                           current_user=current_user,
-                           to_update=to_update,
-                           all_users=all_users,
-                           id=id,
-                           form=form)
+    if current_user.id in admins:
+        if request.method == "POST":
+            if request.form["edit"] == "Update Profile":
+                to_update.full_name = request.form["full_name"]
+                to_update.age = request.form["age"]
+                to_update.location = request.form["location"]
+                to_update.username = request.form["username"]
+                to_update.email = request.form["email"]
+                try:
+                    db.session.commit()
+                    flash("User profile updated successfully!")
+                    return render_template("admin_user_edit.html",
+                                           current_user=current_user,
+                                           to_update=to_update,
+                                           all_users=all_users,
+                                           id=id,
+                                           form=form)
+                except:
+                    flash("Oops! Something went wrong! Try again!")
+                    return render_template("admin_user_edit.html",
+                                           current_user=current_user,
+                                           to_update=to_update,
+                                           all_users=all_users,
+                                           id=id,
+                                           form=form)
+            if request.form["edit"] == "Delete Profile":
+                try:
+                    db.session.delete(to_update)
+                    db.session.commit()
+                    return redirect(url_for("admin"))
+                except:
+                    flash("Oops! Something went wrong. Try again.")
+        return render_template("admin_user_edit.html",
+                               current_user=current_user,
+                               to_update=to_update,
+                               all_users=all_users,
+                               id=id,
+                               form=form)
+    else:
+        flash("You are not authorized to see this page.")
+        return redirect("index")
 
 
-@app.route("/products")
+@app.route("/products", methods=["GET", "POST"])
 @login_required
 def admin_products():
     all_products = Products.query.order_by(Products.date_added)
-    id = current_user.id
-    if id in [1, 3]:
+    if current_user.id in admins:
         return render_template("admin_products.html",
                                all_products=all_products)
     else:
@@ -303,24 +307,28 @@ def admin_products():
 @login_required
 def add_product():
     form = AddProduct()
-    if form.validate_on_submit():
-        new_product = Products(product_name=form.product_name.data,
-                               description=form.description.data,
-                               category=form.category.data,
-                               origin=form.origin.data,
-                               price=form.price.data,
-                               image=form.image.data,
-                               date_added=form.date_added)
-        db.session.add(new_product)
-        db.session.commit()
-        flash(f"Product '{form.product_name.data}' has been successfully added.")
+    if current_user.id in admins:
+        if form.validate_on_submit():
+            new_product = Products(product_name=form.product_name.data,
+                                   description=form.description.data,
+                                   category=form.category.data,
+                                   origin=form.origin.data,
+                                   price=form.price.data,
+                                   image=form.image.data,
+                                   date_added=form.date_added)
+            db.session.add(new_product)
+            db.session.commit()
+            flash(f"Product '{form.product_name.data}' has been successfully added.")
 
-    else:
+        else:
+            return render_template("add_product.html",
+                        form=form)
+
         return render_template("add_product.html",
-                    form=form)
-
-    return render_template("add_product.html",
-                           form=form)
+                               form=form)
+    else:
+        flash("You are not authorized to see this page. Only admins can add products.")
+        return redirect(url_for("dashboard"))
 
 @app.route("/edit_product/<int:id>", methods=["GET", "POST"])
 @login_required
@@ -328,42 +336,46 @@ def edit_product(id):
     form = EditProduct()
     all_products = Products.query.order_by(Products.date_added)
     to_edit = Products.query.get_or_404(id)
-    if request.method == "POST":
-        if request.form["edit"] == "Update Product":
-            to_edit.product_name = request.form["product_name"]
-            to_edit.description = request.form["description"]
-            to_edit.category = request.form["category"]
-            to_edit.origin = request.form["origin"]
-            to_edit.price = request.form["price"]
-            to_edit.image = request.form["image"]
-            try:
-                db.session.commit()
-                flash("Product updated successfully!")
-                return render_template("edit_product.html",
-                                       to_edit=to_edit,
-                                       all_products=all_products,
-                                       id=id,
-                                       form=form)
-            except:
-                flash("Oops! Something went wrong. Try again!")
-                return render_template("admin_products.html",
-                                       to_edit=to_edit,
-                                       all_products=all_products,
-                                       id=id,
-                                       form=form)
-        if request.form["edit"] == "Delete Product":
-            try:
-                db.session.delete(to_edit)
-                db.session.commit()
-                flash("Product deleted successfully!")
-                return redirect(url_for("admin_products"))
-            except:
-                flash("Oops! Something went wrong. Try again!")
-    return render_template("edit_product.html",
-                           to_edit=to_edit,
-                           all_products=all_products,
-                           id=id,
-                           form=form)
+    if current_user.id in admins:
+        if request.method == "POST":
+            if request.form["edit"] == "Update Product":
+                to_edit.product_name = request.form["product_name"]
+                to_edit.description = request.form["description"]
+                to_edit.category = request.form["category"]
+                to_edit.origin = request.form["origin"]
+                to_edit.price = request.form["price"]
+                to_edit.image = request.form["image"]
+                try:
+                    db.session.commit()
+                    flash("Product updated successfully!")
+                    return render_template("edit_product.html",
+                                           to_edit=to_edit,
+                                           all_products=all_products,
+                                           id=id,
+                                           form=form)
+                except:
+                    flash("Oops! Something went wrong. Try again!")
+                    return render_template("admin_products.html",
+                                           to_edit=to_edit,
+                                           all_products=all_products,
+                                           id=id,
+                                           form=form)
+            if request.form["edit"] == "Delete Product":
+                try:
+                    db.session.delete(to_edit)
+                    db.session.commit()
+                    flash("Product deleted successfully!")
+                    return redirect(url_for("admin_products"))
+                except:
+                    flash("Oops! Something went wrong. Try again!")
+        return render_template("edit_product.html",
+                               to_edit=to_edit,
+                               all_products=all_products,
+                               id=id,
+                               form=form)
+    else:
+        flash("You are not authorized to see this page. Only admins can edit products.")
+        return redirect(url_for("dashboard"))
 
 
 @app.route("/user_products")
