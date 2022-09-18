@@ -7,4 +7,4 @@ Current state:
 - admins can add/edit/delete products.
 - admins can edit/delete other users.
 - products presentation page.
-- contact page.
+- working contact page.
