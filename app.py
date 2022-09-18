@@ -221,12 +221,14 @@ def dashboard():
                 return render_template("dashboard.html",
                                        current_user=current_user,
                                        to_update=to_update,
+                                       admins=admins,
                                        form=form)
             except:
                 flash("Oops! Something went wrong! Try again!")
                 return render_template("dashboard.html",
                                        current_user=current_user,
                                        to_update=to_update,
+                                       admins=admins,
                                        form=form)
         if request.form["edit"] == "Delete Profile":
             try:
@@ -238,6 +240,7 @@ def dashboard():
     return render_template("dashboard.html",
                            current_user=current_user,
                            to_update=to_update,
+                           admins=admins,
                            form=form)
 
 

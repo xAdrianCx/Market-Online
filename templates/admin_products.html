@@ -8,8 +8,10 @@
 {% endfor %}
 {% block content %}
 
-<h2><u>Products Area</u></h2>
-    <br/><br/>
+    <h2><center><u>Products Area</u></center></h2>
+        <br/>
+    <h3>Admin logged in: {{ current_user.username}}</h3>
+        <br/>
 <div class="btn btn-warning btn-right"><a href="{{ url_for('add_product') }}">Add Product</a></div>
     <h5>Click on a Product Name to edit or delete,
         or click the "Add Product" button to add a new product.</h5><br/>

@@ -9,11 +9,15 @@
 {% endfor %}
 
 <div class="col-sm-9 col-sm-9-offset-3 col-md-10 col-md-offset-2 main">
-    <h2 class="page-header"><u>Dashboard</u></h2>
+    <h2><center><u>Dashboard</u></center></h2>
     <br/><br/>
-    <h3 class="page-header">You are logged in as {{ current_user.username }}</h3>
+    {% if current_user.id in admins %}
+    <h3>You are logged in as ADMIN: {{ current_user.username }}. </h3>
     <br/>
-
+    {% else %}
+    <h3>You are logged in as {{ current_user.username }}</h3>
+    <br/>
+    {% endif %}
 <div class="card">
   <div class="card-header">
       <strong>{{ current_user.username }}'s Dashboard</strong>
