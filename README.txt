@@ -1,5 +1,8 @@
 An Online Market for IT products.
 
+- clone the repo to your PC.
+- pip install requirements.txt
+
 Current state:
     - can register users.
     - uses a login system.
